@@ -169,6 +169,20 @@ function setupLazyImages() {
     }
 }
 
+function updateClock(elements, formatter) {
+    const currentDate = new Date();
+    for (const elem of elements) {
+        elem.textContent = formatter.format(currentDate);
+    }
+}
+
+function setupClock() {
+    const clockFormatter = new Intl.DateTimeFormat(undefined, {minute: "numeric", hour: "numeric"});
+    const elements = document.getElementsByClassName("glance-clock");
+    updateClock(elements, clockFormatter)
+    setInterval(() => {updateClock(elements, clockFormatter)}, 1000);
+}
+
 async function setupPage() {
     const pageElement = document.getElementById("page");
     const pageContents = await fetchPageContents(pageData.slug);
@@ -182,6 +196,7 @@ async function setupPage() {
     setTimeout(setupLazyImages, 5);
     setupCarousels();
     setupDynamicRelativeTime();
+    setupClock();
 }
 
 if (document.readyState === "loading") {
